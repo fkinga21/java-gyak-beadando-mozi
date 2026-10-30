@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adatbázis</title>
+</head>
+<body>
+<div th:replace="~{menu :: menu}"></div>
+<hr>
+<h1>Adatbázis</h1>
+
+<h2>Filmek</h2>
+<table border="1" cellpadding="4">
+    <tr><th>ID</th><th>Cím</th><th>Év</th><th>Hossz (perc)</th></tr>
+    <tr th:each="f : ${filmek}">
+        <td th:text="${f.id}"></td>
+        <td th:text="${f.cim}"></td>
+        <td th:text="${f.ev}"></td>
+        <td th:text="${f.hossz}"></td>
+    </tr>
+</table>
+
+<h2>Mozik</h2>
+<table border="1" cellpadding="4">
+    <tr><th>ID</th><th>Név</th><th>Város</th><th>Férőhely</th></tr>
+    <tr th:each="m : ${mozik}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.nev}"></td>
+        <td th:text="${m.varos}"></td>
+        <td th:text="${m.ferohely}"></td>
+    </tr>
+</table>
+
+<h2 id="eloadasok">Előadások</h2>
+<table border="1" cellpadding="4">
+    <tr><th>Dátum</th><th>Film</th><th>Mozi</th><th>Város</th><th>Nézők</th><th>Bevétel (Ft)</th></tr>
+    <tr th:each="e : ${eloadasok.content}">
+        <td th:text="${#temporals.format(e.datum, 'yyyy.MM.dd.')}"></td>
+        <td th:text="${e.film.cim}"></td>
+        <td th:text="${e.mozi.nev}"></td>
+        <td th:text="${e.mozi.varos}"></td>
+        <td th:text="${e.nezoszam}"></td>
+        <td th:text="${#numbers.formatInteger(e.bevetel, 3, 'WHITESPACE')}"></td>
+    </tr>
+</table>
+
+<p>
+    <a th:if="${eloadasok.hasPrevious()}"
+       th:href="@{/adatbazis(page=${eloadasok.number - 1})}">« Előző</a>
+    <span th:text="${eloadasok.number + 1} + ' / ' + ${eloadasok.totalPages} + '. oldal'"></span>
+    <a th:if="${eloadasok.hasNext()}"
+       th:href="@{/adatbazis(page=${eloadasok.number + 1})}">Következő »</a>
+</p>
+</body>
+</html>

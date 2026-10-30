@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="menu">
+    <a th:href="@{/}">Főoldal</a>
+    <a th:href="@{/adatbazis}">Adatbázis</a>
+
+    <span sec:authorize="isAnonymous()">
+        | <a th:href="@{/register}">Regisztráció</a>
+        | <a th:href="@{/login}">Belépés</a>
+    </span>
+
+    <span sec:authorize="isAuthenticated()">
+        | <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit">Kilépés</button>
+        </form>
+    </span>
+</nav>
+</body>
+</html>

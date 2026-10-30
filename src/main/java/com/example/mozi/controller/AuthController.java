@@ -1,0 +1,52 @@
+package com.example.mozi.controller;
+
+import com.example.mozi.entity.User;
+import com.example.mozi.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class AuthController {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam String username,
+                           @RequestParam String password,
+                           Model model) {
+        if (username.isBlank() || password.length() < 4) {
+            model.addAttribute("error", "A felhasználónév nem lehet üres, a jelszó legalább 4 karakter legyen!");
+            return "register";
+        }
+        if (userRepository.findByUsername(username).isPresent()) {
+            model.addAttribute("error", "Ez a felhasználónév már foglalt!");
+            return "register";
+        }
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setRole("USER");
+        userRepository.save(user);
+        return "redirect:/login?registered";
+    }
+}
