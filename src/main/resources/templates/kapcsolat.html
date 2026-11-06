@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Kapcsolat')}"></head>
 <body>
-$END$
+<nav th:replace="~{layout :: menu}"></nav>
+
+<main class="container my-5" style="max-width: 640px;">
+    <h1 class="mb-4">Kapcsolat</h1>
+    <p>Kérdése van, vagy üzenne nekünk? Töltse ki az alábbi űrlapot.</p>
+
+    <div th:if="${siker}" th:text="${siker}" class="alert alert-success"></div>
+
+    <form th:action="@{/kapcsolat}" th:object="${uzenet}" method="post" novalidate>
+        <div class="mb-3">
+            <label class="form-label" for="nev">Név</label>
+            <input class="form-control" type="text" id="nev" th:field="*{nev}"
+                   th:classappend="${#fields.hasErrors('nev')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('nev')}" th:errors="*{nev}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="email">E-mail</label>
+            <input class="form-control" type="text" id="email" th:field="*{email}"
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="targy">Tárgy</label>
+            <input class="form-control" type="text" id="targy" th:field="*{targy}"
+                   th:classappend="${#fields.hasErrors('targy')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('targy')}" th:errors="*{targy}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="szoveg">Üzenet</label>
+            <textarea class="form-control" id="szoveg" rows="5" th:field="*{szoveg}"
+                      th:classappend="${#fields.hasErrors('szoveg')} ? 'is-invalid'"></textarea>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('szoveg')}" th:errors="*{szoveg}"></div>
+        </div>
+        <button type="submit" class="btn btn-primary">Küldés</button>
+    </form>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>
