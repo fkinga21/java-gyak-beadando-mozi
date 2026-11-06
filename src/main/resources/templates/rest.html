@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('REST')}"></head>
 <body>
-$END$
+<nav th:replace="~{layout :: menu}"></nav>
+
+<main class="container my-4">
+    <h1 class="mb-3">RESTful API</h1>
+    <p>Az alkalmazás a mozik adatait JSON formátumban teszi elérhetővé. Az olvasás mindenkinek nyitott,
+        a módosításhoz admin felhasználó szükséges (HTTP Basic hitelesítés).</p>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr><th>Metódus</th><th>URL</th><th>Leírás</th><th>Jogosultság</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>GET</td><td><code>/api/mozik</code></td><td>Az összes mozi listázása</td><td>nyitott</td></tr>
+            <tr><td>GET</td><td><code>/api/mozik/{id}</code></td><td>Egy mozi lekérése</td><td>nyitott</td></tr>
+            <tr><td>POST</td><td><code>/api/mozik</code></td><td>Új mozi felvétele (JSON törzs)</td><td>admin</td></tr>
+            <tr><td>PUT</td><td><code>/api/mozik/{id}</code></td><td>Mozi módosítása (JSON törzs)</td><td>admin</td></tr>
+            <tr><td>DELETE</td><td><code>/api/mozik/{id}</code></td><td>Mozi törlése</td><td>admin</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p>Próbálja ki: <a th:href="@{/api/mozik}">/api/mozik</a>,
+        <a th:href="@{/api/mozik/1}">/api/mozik/1</a></p>
+
+    <h2 class="mt-4">Példa JSON törzs</h2>
+    <pre class="bg-dark text-light p-3 rounded">{"nev": "Teszt Mozi", "varos": "Szolnok", "ferohely": 120}</pre>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>
