@@ -1,17 +1,56 @@
 <!DOCTYPE html>
-<html lang="hu" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Főoldal</title>
-</head>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Főoldal')}"></head>
 <body>
-<div th:replace="~{menu :: menu}"></div>
-<hr>
-<h1>Mozi alkalmazás</h1>
-<div sec:authorize="isAuthenticated()">
-    <p>Bejelentkezve: <strong sec:authentication="name"></strong></p>
-</div>
+<nav th:replace="~{layout :: menu}"></nav>
+
+<main>
+    <header class="hero text-center text-white">
+        <div class="container">
+            <h1 class="display-3 fw-bold">Művészfilm Mozik</h1>
+            <p class="lead mb-4">Klasszikus magyar filmek országszerte – 1999 minden napja számokban.</p>
+            <a class="btn btn-warning btn-lg" th:href="@{/adatbazis}">Böngéssz az adatbázisban</a>
+        </div>
+    </header>
+
+    <section class="container my-5">
+        <div class="row text-center g-4">
+            <div class="col-12 col-md-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body">
+                        <div class="display-5" th:text="${filmSzam}">0</div>
+                        <div>klasszikus film</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body">
+                        <div class="display-5" th:text="${moziSzam}">0</div>
+                        <div>mozi az ország városaiban</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card stat-card h-100">
+                    <div class="card-body">
+                        <div class="display-5" th:text="${#numbers.formatInteger(eloadasSzam, 3, 'WHITESPACE')}">0</div>
+                        <div>előadás egy év alatt</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container">
+        <h2>Rólunk</h2>
+        <p>A Művészfilm Kht. több városban is üzemeltet mozit. A fenntartott mozik mindegyike legfeljebb
+            napi egy vetítést tart, a nézőszámokról és a bevételekről pedig a cég pontos nyilvántartást vezet.
+            Az oldalon ezekből az adatokból böngészhetsz, és látogatóként, regisztrált felhasználóként vagy
+            adminisztrátorként más-más funkciókat érsz el.</p>
+    </section>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>

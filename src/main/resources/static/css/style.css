@@ -1,0 +1,27 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.hero {
+    padding: 7rem 0;
+    background:
+            linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .85)),
+            url('../img/hero.jpg') center / cover no-repeat,
+            linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.stat-card .display-5 {
+    color: #f39c12;
+    font-weight: 700;
+}
+
+.tabla-gorgetheto {
+    max-height: 380px;
+    overflow-y: auto;
+}
