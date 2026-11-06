@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
+<html lang="hu" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('Film')}"></head>
 <body>
-$END$
+<nav th:replace="~{layout :: menu}"></nav>
+
+<main class="container my-5" style="max-width: 560px;">
+    <h1 class="mb-4" th:text="${film.id == null} ? 'Új film hozzáadása' : 'Film szerkesztése'">Film</h1>
+
+    <form th:action="@{/crud/mentes}" th:object="${film}" method="post">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="mb-3">
+            <label class="form-label" for="cim">Cím</label>
+            <input class="form-control" type="text" id="cim" th:field="*{cim}"
+                   th:classappend="${#fields.hasErrors('cim')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('cim')}" th:errors="*{cim}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="ev">Bemutató éve</label>
+            <input class="form-control" type="number" id="ev" th:field="*{ev}"
+                   th:classappend="${#fields.hasErrors('ev')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('ev')}" th:errors="*{ev}"></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="hossz">Hossz (perc)</label>
+            <input class="form-control" type="number" id="hossz" th:field="*{hossz}"
+                   th:classappend="${#fields.hasErrors('hossz')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('hossz')}" th:errors="*{hossz}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mentés</button>
+        <a class="btn btn-secondary" th:href="@{/crud}">Mégse</a>
+    </form>
+</main>
+
+<footer th:replace="~{layout :: footer}"></footer>
 </body>
 </html>
