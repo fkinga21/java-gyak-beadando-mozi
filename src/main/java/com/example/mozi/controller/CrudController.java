@@ -18,6 +18,7 @@ import java.util.Optional;
 public class CrudController {
 
     private final FilmRepository filmRepository;
+    private final Object idZar = new Object();
 
     public CrudController(FilmRepository filmRepository) {
         this.filmRepository = filmRepository;
@@ -59,9 +60,20 @@ public class CrudController {
         }
         boolean uj = film.getId() == null;
         if (uj) {
-            film.setId(filmRepository.maxId() + 1);
+            // Az ID kiosztása és a mentés egyszerre csak egy szálon fut,
+            // így két egyidejű beszúrás nem kaphatja ugyanazt az ID-t.
+            synchronized (idZar) {
+                film.setId(filmRepository.maxId() + 1);
+                filmRepository.save(film);
+            }
+        } else {
+            // Közben törölt film szerkesztése ne hozza létre újra a filmet.
+            if (!filmRepository.existsById(film.getId())) {
+                ra.addFlashAttribute("hiba", "A film nem található, időközben törölték.");
+                return "redirect:/crud";
+            }
+            filmRepository.save(film);
         }
-        filmRepository.save(film);
         ra.addFlashAttribute("siker", uj ? "A film hozzáadva." : "A film módosítva.");
         return "redirect:/crud";
     }

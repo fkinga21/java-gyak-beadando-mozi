@@ -19,6 +19,7 @@ import java.util.Map;
 public class MoziRestController {
 
     private final MoziRepository moziRepository;
+    private final Object idZar = new Object();
 
     public MoziRestController(MoziRepository moziRepository) {
         this.moziRepository = moziRepository;
@@ -41,8 +42,13 @@ public class MoziRestController {
     // POST /api/mozik: új mozi (csak admin)
     @PostMapping
     public ResponseEntity<Mozi> letrehoz(@Valid @RequestBody Mozi mozi) {
-        mozi.setId(moziRepository.maxId() + 1);
-        Mozi mentett = moziRepository.save(mozi);
+        Mozi mentett;
+        // Az ID kiosztása és a mentés egyszerre csak egy szálon fut,
+        // így két egyidejű beszúrás nem kaphatja ugyanazt az ID-t.
+        synchronized (idZar) {
+            mozi.setId(moziRepository.maxId() + 1);
+            mentett = moziRepository.save(mozi);
+        }
         URI hely = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(mentett.getId()).toUri();
         return ResponseEntity.created(hely).body(mentett);
